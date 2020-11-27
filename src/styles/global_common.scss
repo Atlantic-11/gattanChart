@@ -1,0 +1,108 @@
+#app {
+    width: 100%;
+    min-height: calc(100vh - 30px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    #layout {
+        min-height: calc(100% - 70px);
+        #main-container {
+            min-height: calc(100vh - 100px);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            // background-color: #f98;
+        }
+    } 
+}
+
+.el-tag {
+    height: 24px;
+    /* width: 42px; */
+    line-height: 24px;
+}
+.el-tag-emergency {
+    color: #EC6182;
+    border-color: #FDE9EB;
+    background-color: #fde9eb;
+}
+.el-tag-warning {
+    color: #ffd271;
+    border-color: #FFF3E7;
+    background-color: #FFF3E7;
+}
+.el-tag-normal {
+    color: #5fcadc;
+    border-color: #E5F7F9;
+    background-color: #E5F7F9;
+}
+.el-tag-warning {
+    color:#F1875D;
+    border-color: #E5F7F9;
+    background-color:rgba(241, 135, 93, .2);
+}
+/* 逾期 */
+.el-tag-overdue {
+    color: #FA5370;
+    font-weight: 600;
+    background: rgba(250, 83, 112, 0.2);
+    border-radius: 10px;
+    border: 0px ;
+}
+/* 将逾期 */
+.el-tag-beOverdue {
+    color: #F1875D;
+    font-weight: 600;
+    border: 0px ;
+    background: rgba(241, 135, 93, 0.2);
+    border-radius: 10px;
+}
+/* 待下发 */
+.el-tag-issued {
+    color: #AA64F0;
+    font-weight: 600;
+    border: 0px ;
+    background: rgba(170, 100, 240, 0.2);
+    border-radius: 10px;
+}
+/* 已拒绝 */
+.el-tag-refused {
+    color: #6A748B;
+    font-weight: 600;
+    border: 0px ;
+    background: rgba(106, 116, 139, 0.2);
+    border-radius: 10px;
+}
+/* 已延期 */
+.el-tag-postponed {
+    color: #F0C850;
+    font-weight: 600;
+    border: 0px ;
+    background: rgba(240, 220, 80, 0.2);
+    border-radius: 10px;
+}
+/* 已完成 */
+.el-tag-done {
+    color: #3CD2A0;
+    font-weight: 600;
+    border: 0px ;
+    background: rgba(60, 210, 160, 0.2);
+    border-radius: 10px;
+}
+/* 进行中 */
+.el-tag-underway {
+    color: #2F68E9;
+    font-weight: 600;
+    border: 0px ;
+    background: rgba(47, 104, 233, 0.2);
+    border-radius: 10px;
+}
+/* 暂停 */
+.el-tag-suspend {
+    color: #333333;
+    font-weight: 600;
+    border: 0px ;
+    background: rgba(51, 51, 51, 0.2);
+    border-radius: 10px;
+}
