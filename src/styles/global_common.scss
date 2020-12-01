@@ -16,7 +16,11 @@
         }
     } 
 }
-
+.div-dialog-2col-form-item {
+    padding: 0 85px;
+    display: flex;
+    justify-content: space-between;
+}
 .el-tag {
     height: 24px;
     /* width: 42px; */

@@ -2,21 +2,21 @@
   <div class="container">
      <!-- v-loading="loading" :element-loading-text="loadingText" element-loading-background="rgba(39, 51, 78, 0.9)" -->
     <div class="div-container-right"> 
-      <div class="div-container-right-item-taskDetails">
+      <div class="div-container-right-item-taskDetails" :style="{ flexBasis: cutOffLeft + 'px' }">
         <div class="div-container-right-item-taskDetails-top">
            <span class="projectOverview">任务详情</span>
            <div class="item-properties">
              <span>排序</span>
-             <div>
-               <span>全部任务</span>
-              <span v-if="isDisabled">操作</span>
-             </div>
-           </div>
+             <span>全部任务</span>
+             <span v-if="isDisabled">操作</span>
+          </div>
         </div>
-        <div class="div-container-right-item-taskDetails-bottom" @scroll.stop.prevent="handlemousewheel" :style="{height: isDisabled ? 'calc(100vh - 270px)' : 'calc(100vh - 226px)'}">
+        <div class="div-container-right-item-taskDetails-bottom" @scroll.stop.prevent="handlemousewheel" :style="{height: isDisabled ? 'calc(100vh - 300px)' : 'calc(100vh - 226px)'}">
           <div v-for="(item, index) in taskList" :key="item.id + index" :ref="'div-container-right-item-taskDetails-bottom-item-' + index" class="div-container-right-item-taskDetails-bottom-item">
-            <div class="all-tasks" :title="item.taskTypeName">
+            <div>
               <span :style="(index + 1) > 9 ? '' : {paddingLeft: '2%', marginRight: '8%'}">{{ index + 1 }}</span>
+            </div>
+            <div class="all-tasks" :title="item.taskTypeName">
               <el-tag :class="item.className">{{ item.statusName }}</el-tag>
               <el-tooltip class="item" effect="dark" :content="item.taskTypeName" placement="top">
                 <span class="task-name">{{ item.taskTypeName }}</span>
@@ -58,7 +58,7 @@
             </div>
           </div>
         </div>
-        <div  class="div-container-right-item-taskDetails-btn"  v-if="isDisabled">
+        <div  class="div-container-right-item-taskDetails-btn" v-if="isDisabled">
           <el-button type="primary" @click="showAllocatingTask()">
             <i class="iconfont mg-xx-icon-anniu-shanchu button-icon"></i>
             新增任务
@@ -118,6 +118,11 @@
           <div class="div-container-right-GanttChart-item-current-day" v-if="taskYear.includes(nowTimes.year) && taskMonth.includes(nowTimes.month)" :style="{ left: nowDay * 60 - 30 + 'px'}"></div>
         </div>
       </div>
+      <div class="cut-off" @mousedown.stop.prevent="handleMovecutOff" :style="{left: cutOffLeft + 'px'}" ></div>
+      <div class="full-screen" >
+        <i class="iconfont iconquanping button-icon" @click="fullScreen()"></i> 
+        <!-- iconquxiaoquanping -->
+      </div>
       <div class="div-GanttChart-click-month-left-btn" v-if="taskList.length > 0">
         <i class="iconfont iconshang button-icon" @click="clickMonth('Left')"></i>
       </div>
@@ -132,23 +137,23 @@
       </div>
     </div>
     <!-- 分配任务 -->
-    <!-- <DialogAllocatingTask
+    <DialogAllocatingTask
       :projectId="projectId"
       :show.sync="dialogAllocatingTaskShowFlag"
       :taskItem="taskItem"
       :dialogTitle="dialogTitle"
     >
-    </DialogAllocatingTask> -->
+    </DialogAllocatingTask>
     
   </div>
 </template>
 
 <script>
-// import DialogAllocatingTask from '@/components/dialog-allocating-task.vue';
+import DialogAllocatingTask from '@/components/dialog-allocating-task.vue';
 export default {
   name: "assignTask",
   components: {
-    // DialogAllocatingTask,
+    DialogAllocatingTask,
   },
   computed: {
    
@@ -242,8 +247,10 @@ export default {
       // 任务ID
       taskId: undefined,
       userId: undefined,
-      isDisabled: false,
-      isHighlightBorder: undefined
+      isDisabled: true,
+      isHighlightBorder: undefined,
+      status: 0,
+      cutOffLeft: 305
     }
   },
   created() {
@@ -793,12 +800,12 @@ export default {
    },
    // 新增任务
    showAllocatingTask() {
-     if(this.describe.status == 3) return this.$message({
+     if(this.status == 3) return this.$message({
          showClose: true,
          message: "项目已完成无法新增任务",
          type: "error"
      });
-     if(this.describe.status == -1) return this.$message({
+     if(this.status == -1) return this.$message({
          showClose: true,
          message: "项目还未分配无法新增任务",
          type: "error"
@@ -856,7 +863,6 @@ export default {
    },
    // 删除任务
    deleteTask(item) {
- 
      this.deleteTaskShowFlag = true
      this.taskId = item.id
    },
@@ -908,6 +914,20 @@ export default {
       this.searchProjectDetailed()
       this.autoHandleScroll()
      })
+   },
+   // 移动分割线
+   handleMovecutOff(e) {
+     let nowClientX = e.clientX
+     let cutOffLeft = this.cutOffLeft
+     let that = this
+       document.onmousemove = (e)=>{
+        that.cutOffLeft = e.clientX - nowClientX + cutOffLeft < 305 ? 305 :e.clientX - nowClientX + cutOffLeft
+      }
+     
+     document.onmouseup = (e) => {
+        document.onmousemove = null;
+        document.onmouseup = null;
+      };
    }
   },
 };
@@ -1186,13 +1206,17 @@ export default {
     overflow: hidden;
     border: 1px solid #DCDFE6;
     .div-container-right-item-taskDetails {
-      flex-basis: 304px;
+      
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
       background-color: #fff;
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
+        // border-right: 1px solid #6A748B;
+        // border-right: 1px solid #DCDFE6;
+        // border-right: 1px solid #DCDFE6;
+
       .div-container-right-item-taskDetails-top {
         flex-basis: 120px;
         display: flex;
@@ -1200,7 +1224,6 @@ export default {
         justify-content: space-between;
         padding: 16px 50px 13px 20px;
         box-sizing: border-box;
-        border-right: 1px solid #6A748B;
         background-color: #27334E;
         .projectOverview {
           font-size: 18px;
@@ -1223,8 +1246,6 @@ export default {
         }
       }
       .div-container-right-item-taskDetails-bottom {
-        
-        border-right: 1px solid #DCDFE6;
         background-color: #fff;
         border-top-left-radius: 8px;
         overflow-y: auto;
@@ -1246,13 +1267,15 @@ export default {
         .div-container-right-item-taskDetails-bottom-item {
           display: flex;
           justify-content: space-between;
-          padding: 5% 4%;
+          padding: 15px 4%;
+          width: 95%;
           background-color: #fff;
           border-bottom: 1px solid #F8F8F8;
           .delete {
             color: rgba(250, 83, 112, 0.7);
           }
           .all-tasks {
+            margin-left: 5px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -1303,7 +1326,6 @@ export default {
         font-weight: 400;
         color: #FFFFFF;
         line-height: 20px;
-        border-right: 1px solid #DCDFE6;
         border-bottom-left-radius: 8px;
 
         &>.el-button {
@@ -1369,7 +1391,7 @@ export default {
             .div-container-right-item-GanttChart-month {
               flex:0.5;
               padding: 20px;
-              padding-left: 435px;
+              // padding-left: 435px;
               font-size: 14px;
               font-family: PingFangSC-Semibold, PingFang SC;
               font-weight: 600;
@@ -1526,8 +1548,9 @@ export default {
       position: absolute;      
       z-index: 101;    
       background: #27334E;
-      width: 40px;
-      height: 40px;
+      width: 60px;
+      height: 60px;
+      text-align: center;
       i {
         display: inline-block;
         width: 24px;
@@ -1538,6 +1561,10 @@ export default {
         font-weight: 800;          
         background: rgba(47, 104, 233, 0.3);
         border-radius: 2px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
     }
     [class*="div-GanttChart-click-day"] {
@@ -1552,22 +1579,40 @@ export default {
     .div-GanttChart-click-month-left-btn {
       top: 24px;
       left: 304px;
-      padding: 15px 0 0 15px;
+      // padding: 15px 0 0 15px;
     }
     .div-GanttChart-click-month-right-btn {
       top: 0px;
       right: 0px;
-      padding: 15px 0 0 21px;
+      // padding: 15px 0 0 21px;
     }
     .div-GanttChart-click-day-left-btn {
       top: 84px;
       left: 304px;
-      padding: 15px 0 0 21px;
+      // padding: 15px 0 0 21px;
     }
     .div-GanttChart-click-day-right-btn {
       top: 60px;
       right: 0px;
-      padding: 15px 0 0 15px;
+      // padding: 20px 0 0 20px;
+    }
+    .cut-off{
+      height: 100%;
+      width: 3px;
+      background-color: #f98;
+      position: absolute;
+      cursor: w-resize;
+    }
+    .full-screen {
+      width: 44px;
+      height: 44px;
+      position: absolute;
+      right: 15px;
+      top: 144px;
+      z-index: 100;
+      i{
+        font-size: 22px;
+      }
     }
   }
 }

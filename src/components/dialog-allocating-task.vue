@@ -16,11 +16,10 @@
             <div class="div-dialog-2col-form-item">
               <div class="div-dialog-2col-form-item__right">
                 <el-form-item label-width="150px" label="任务类型：" prop="taskTypeId">
-                  <SelectProjectTaskType
+                  <el-input
                     v-if="taskflag"
                     :value="queryForm.taskTypeId"
-                    @handleSelectProjectTaskTypeCallback="handleSelectProjectTaskTypeCallback"
-                  ></SelectProjectTaskType>
+                  ></el-input>
                   <el-input v-if="!taskflag" disabled v-model="queryForm.taskTypeName">
                   </el-input>
                 </el-form-item>
@@ -35,10 +34,9 @@
             <div class="div-dialog-2col-form-item" v-if="!taskflag">
               <div class="div-dialog-2col-form-item__left">
                 <el-form-item label-width="150px" label="任务责任人：" prop="responsibleUserId">
-                  <InputSearchUser
-                      @handleUserSearchComponentCallback="handleUserSearchComponentCallback"
+                  <el-input
                       :value="queryForm.responsibleUserName"
-                  ></InputSearchUser>
+                  ></el-input>
                 </el-form-item>
               </div>
               <div class="div-dialog-2col-form-item__right workHours">
@@ -50,34 +48,26 @@
             <div class="div-dialog-2col-form-item" v-if="taskflag">
               <div class="div-dialog-2col-form-item__left">
                 <el-form-item label="前置任务：" label-width="150px" prop="preTaskId">
-                  <el-select v-model="queryForm.preTaskId" @change="selectPreposition" clearable placeholder="请选择前置任务">
-                    <el-option
-                      v-for="item in preTaskList"
-                      :data="item"
-                      :key="item.id"
-                      :value="item.id"
-                      :label="item.name"
-                    ></el-option>
-                  </el-select>
+                  <el-input v-model="queryForm.preTaskId" @change="selectPreposition" clearable placeholder="请选择前置任务">
+                  </el-input>
                 </el-form-item>
               </div>
               <div class="div-dialog-2col-form-item__right">
                 <el-form-item label-width="150px" label="任务责任人：" prop="responsibleUserId">
-                  <InputSearchUser
-                  @handleUserSearchComponentCallback="handleUserSearchComponentCallback"
+                  <el-input
                   :value="queryForm.responsibleUserName"
-                ></InputSearchUser>
+                ></el-input>
                 </el-form-item>
               </div>
             </div>
             <div class="div-dialog-2col-form-item" v-if="taskflag">
               <div class="div-dialog-2col-form-item__left">
                 <el-form-item label-width="150px" label="项目职能：" prop="projectFunId">
-                  <SelectProjectFunction
+                  <el-input
                     ref="SelectProjectFunction"
                     :value="queryForm.projectFunId"
                     @handleSelectFuncNameCallback="handleSelectFuncNameCallback"
-                  ></SelectProjectFunction>
+                  ></el-input>
                 </el-form-item>
               </div>
               <div class="div-dialog-2col-form-item__right workHours">
@@ -123,17 +113,19 @@
               </div>
               <div class="div-dialog-2col-form-item__right docFile">
                 <el-form-item label-width="150px" label="附件：">
-                  <DialogUploadFile
-                    :fileList="docFileList"
-                    :fileId="queryForm.fileId"
-                    :uploadFileUrl="this.$apis.File.uploadFile"
-                    @handleSuccessCallback="handleFileSuccessCallback"
-                    @handleErrorCallback="handleFileClear"
-                    @handleElementUiErrorCallback="handleFileClear"
-                    @handleRemoveCallback="handleFileClear"
-                    >
-                  </DialogUploadFile>
-                  <span>(仅支持png/jpg格式、大小不得超过10M)</span>
+                  <el-upload
+                    class="upload-demo"
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    :on-preview="handleFileSuccessCallback"
+                    :on-remove="handleFileClear"
+                    :before-remove="beforeRemove"
+                    multiple
+                    :limit="3"
+                    :on-exceed="handleExceed"
+                    :file-list="docFileList">
+                   <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">(仅支持png/jpg格式、大小不得超过10M)</div>
+                  </el-upload>
                 </el-form-item>
               </div>
             </div>
@@ -149,17 +141,11 @@
 </template>
 
 <script>
-import SelectProjectTaskType from "@/components/common/select-project-task-type";
-import SelectProjectFunction from "@/components/common/select-project-function";
-import DialogUploadFile from "@/components/common/dialog-upload-file";
-import InputSearchUser from "@/components/common/input-search-user";
+
 
 export default {
   components: {
-    SelectProjectTaskType,
-    DialogUploadFile,
-    SelectProjectFunction,
-    InputSearchUser
+
   },
   props: {
     show: {
@@ -625,6 +611,12 @@ export default {
       this.queryForm.taskTypeId = data.value;
       this.queryForm.taskTypeName = data.label;
     },
+    handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+     beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
     // 以下为控制文件上传的方法
     handleFileSuccessCallback(response) {
       this.queryForm.fileId = response.data.fileId

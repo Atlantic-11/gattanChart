@@ -8,6 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 // 样式
 import '@/styles/global_common.scss'
+import '@/styles/global_dialog_style.scss'
+import '@/styles/global_from_style.scss'
 //引入图标字体样式
 import '@/styles/icon-fonts/iconfont.css';
 import '@/styles/icon-fonts/iconfont.js';

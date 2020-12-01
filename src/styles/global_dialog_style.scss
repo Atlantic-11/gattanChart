@@ -1,0 +1,129 @@
+.el-dialog {
+    color:#333;
+    .el-dialog__header{
+      height: 33px;
+      line-height: 39px;
+      padding: 10px 20px !important;
+      border-radius: 4px;
+      border-bottom: 1px solid #EEE;
+      // background-color: #eee;
+    }
+    .dialog-short{
+        .el-dialog__body {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            padding-top: 20px;
+            height: 144px;
+        }
+    }
+
+      .el-dialog__body {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        // height: 246px;
+      }
+ 
+  
+    .el-autocomplete {
+      width: 100%;
+      .el-input {
+        width: 100%;
+        .el-input__inner {
+          width: 92%;
+        }
+      }
+    }
+    .el-cascader {
+      width: 100%;
+      .el-input {
+        width: 100%;
+        .el-input__inner {
+          width: 92%;
+        }
+      }
+    }
+    .el-input {
+        width: 95%;
+        .el-input__inner {
+          width: 92%;
+        }
+        .el-input__suffix {
+          right: 38px;
+        }
+    }
+
+    .el-textarea{
+        width: 95% !important;
+        .el-textarea__inner{
+            width: 92%;
+        }
+        .el-input__count{
+            right: 44px;
+        }
+    }
+    .el-form-item__error {
+        top: 0;
+        left: 445px;
+        width: 24px;
+    }
+
+    ._span{
+        margin-left: 119px;
+    }
+    ._span_simple{
+        display: inline-block;
+        margin-left: 37px;
+        margin-top: 15px;
+    }
+  }
+
+  .dialog-wrap{
+    .detailForm{
+      margin-left: 0px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      .detailForm-col-form-item-group{
+        display: flex;
+        flex-direction: column;
+      }
+      .detailForm-col-form-item{
+        width: 500px;
+      }
+      .detailForm-col-form-item{
+        display: flex;
+        
+        .miniitems{
+          margin-right: 10px;
+          .el-form-item__content{
+            margin-left: 0px !important;
+            display: flex;
+            .el-textarea{
+              height: 156px !important;
+              .el-textarea__inner{
+                height: 156px !important;
+              }
+            }
+          }
+          .el-input__inner{
+            width: 100px !important;
+          }
+        }
+      }
+      .span-required-form-item__star {
+        color: #f56c6c;
+        margin-right: 4px;
+        margin-top: -7px;
+        font-size: 15px !important;
+      }
+    }
+    .el-textarea{
+      width: 127%;
+    }
+  }
+  .span-required-form-item__star {
+    color: #f56c6c;
+    margin-right: 4px;
+    margin-top: -7px;
+    font-size: 15px !important;
+  }
